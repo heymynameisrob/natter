@@ -3,6 +3,38 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: "OpenRunde";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/OpenRunde-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "OpenRunde";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/OpenRunde-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "OpenRunde";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/OpenRunde-Semibold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "OpenRunde";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/OpenRunde-Bold.woff2') format('woff2');
+}
+
 :root {
   --background: #fff;
 
@@ -22,7 +54,7 @@
 
   --shadow: hsl(154, 12%, 12%);
   --border: color-mix(in srgb, var(--gray-12) 10%, transparent);
-  --accent: oklch(0.692 0.1595 240.38);
+  --accent: oklch(0.6633 0.1944 147.44)
 }
 
 .dark {
@@ -72,10 +104,10 @@
   --shadow-floating: var(--shadow-floating);
   --shadow-popover: var(--shadow-popover);
 
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "OpenRunde", sans-serif;
   --font-mono: "Geist Mono", monospace;
-  --font-weight-medium: 500;
-  --font-weight-normal: 450;
+  /*--font-weight-medium: 500;
+  --font-weight-normal: 450;*/
 
   --z-max: 999999;
 

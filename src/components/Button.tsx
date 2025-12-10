@@ -3,7 +3,7 @@ import { Button as BaseButton } from "@base-ui-components/react/button";
 import { cn, tv, type VariantProps } from "tailwind-variants";
 
 export const buttonStyles = tv({
-  base: "inline-flex gap-2 items-center whitespace-nowrap justify-center rounded-lg text-sm leading-4 font-medium focus disabled:opacity-50 disabled:pointer-events-none",
+  base: "inline-flex gap-2 items-center whitespace-nowrap justify-center rounded-full text-sm leading-4 font-medium focus disabled:opacity-50 disabled:pointer-events-none",
   variants: {
     variant: {
       primary: "bg-gray-12 text-background shadow-container hover:bg-gray-11",
@@ -14,10 +14,10 @@ export const buttonStyles = tv({
       destructive: "bg-red-500 text-white shadow-container hover:bg-red-600",
     },
     size: {
-      sm: "h-6 px-1.5 rounded-md",
-      md: "h-8 px-3 rounded-lg",
-      lg: "h-10 rounded-xl px-8",
-      icon: "size-8 rounded-lg px-1 py-1",
+      sm: "h-6 px-1.5",
+      md: "h-8 px-3",
+      lg: "h-11 px-8 text-[15px]",
+      icon: "size-8 px-1 py-1",
     },
   },
 });

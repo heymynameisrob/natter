@@ -15,6 +15,8 @@ export const ONE_HUNDRED_MINUTES = 6_000_000;
 
 export const PARTYKIT_URL = process.env.PARTYKIT_HOST ?? "http://localhost:1999";
 
+export const MD_MAX_MEDIA_QUERY = "(max-width: 767px)";
+
 export function getBaseURL(): string {
   if (typeof window !== "undefined") {
     return window.location.origin;

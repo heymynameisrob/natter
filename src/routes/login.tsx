@@ -31,7 +31,7 @@ function LoginComponent() {
     <CenterLayout>
       <Container size="xs">
         <section className="flex flex-col gap-6">
-          <h1 className="text-lg font-semibold">Login</h1>
+          <h1 className="sr-only">Login</h1>
           <LoginForm />
         </section>
       </Container>
@@ -106,6 +106,7 @@ function LoginForm() {
       <Button
         type="submit"
         size="lg"
+        variant="accent"
         disabled={formState === "submitting"}
         className={cn(
           formState === "success"

@@ -7,6 +7,7 @@ export const user = sqliteTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
   image: text("image"),
+  notificationsEnabled: integer("notifications_enabled", { mode: "boolean" }).default(true).notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .notNull(),
@@ -88,6 +89,10 @@ export const verification = sqliteTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  roomMembers: many(roomMembers),
+  messages: many(messages),
+  subscriptions: many(roomSubscriptions),
+  notificationDevices: many(userNotificationDevices),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -112,3 +117,167 @@ export const posts = sqliteTable("posts", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   metadata: text("metadata", { mode: "json" }).$type<{ foo: string }>(),
 });
+
+// Rooms
+export const rooms = sqliteTable("rooms", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  publicId: text("public_id").notNull().unique(),
+  name: text("name"),
+  lastMessageAt: integer("last_message_at", { mode: "timestamp_ms" })
+    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    .notNull(),
+  inviteToken: text("invite_token").notNull(),
+  tokenExpiresAt: integer("token_expires_at", { mode: "timestamp_ms" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+// Messages
+export const messages = sqliteTable(
+  "messages",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    roomId: integer("room_id")
+      .notNull()
+      .references(() => rooms.id, { onDelete: "cascade" }),
+    content: text("content", { mode: "json" }).$type<Record<string, unknown>>().notNull(),
+    plainText: text("plain_text").notNull(),
+    senderId: text("sender_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    mentions: text("mentions", { mode: "json" }).$type<string[]>().default([]),
+    reactions: text("reactions", { mode: "json" }).$type<Array<{ userId: string; emoji: string }>>().default([]),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => [
+    index("messages_room_id_idx").on(table.roomId),
+    index("messages_sender_id_idx").on(table.senderId),
+  ]
+);
+
+// Room Members
+export const roomMembers = sqliteTable(
+  "room_members",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    roomId: integer("room_id")
+      .notNull()
+      .references(() => rooms.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    role: text("role", { enum: ["admin", "member"] }).default("member").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+  },
+  table => [
+    index("room_members_room_id_idx").on(table.roomId),
+    index("room_members_user_id_idx").on(table.userId),
+  ]
+);
+
+// Room Subscriptions
+export const roomSubscriptions = sqliteTable(
+  "room_subscriptions",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    roomId: integer("room_id")
+      .notNull()
+      .references(() => rooms.id, { onDelete: "cascade" }),
+    status: text("status", { enum: ["off", "mentions", "all"] }).default("all").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => [
+    index("room_subscriptions_user_id_idx").on(table.userId),
+    index("room_subscriptions_room_id_idx").on(table.roomId),
+  ]
+);
+
+// User Notification Devices
+export const userNotificationDevices = sqliteTable(
+  "user_notification_devices",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    url: text("url").notNull(),
+    deviceAddress: text("device_address").notNull().unique(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => [index("user_notification_devices_user_id_idx").on(table.userId)]
+);
+
+// Relations for new tables
+export const roomsRelations = relations(rooms, ({ many }) => ({
+  members: many(roomMembers),
+  messages: many(messages),
+  subscriptions: many(roomSubscriptions),
+}));
+
+export const messagesRelations = relations(messages, ({ one }) => ({
+  room: one(rooms, {
+    fields: [messages.roomId],
+    references: [rooms.id],
+  }),
+  sender: one(user, {
+    fields: [messages.senderId],
+    references: [user.id],
+  }),
+}));
+
+export const roomMembersRelations = relations(roomMembers, ({ one }) => ({
+  room: one(rooms, {
+    fields: [roomMembers.roomId],
+    references: [rooms.id],
+  }),
+  user: one(user, {
+    fields: [roomMembers.userId],
+    references: [user.id],
+  }),
+}));
+
+export const roomSubscriptionsRelations = relations(roomSubscriptions, ({ one }) => ({
+  user: one(user, {
+    fields: [roomSubscriptions.userId],
+    references: [user.id],
+  }),
+  room: one(rooms, {
+    fields: [roomSubscriptions.roomId],
+    references: [rooms.id],
+  }),
+}));
+
+export const userNotificationDevicesRelations = relations(userNotificationDevices, ({ one }) => ({
+  user: one(user, {
+    fields: [userNotificationDevices.userId],
+    references: [user.id],
+  }),
+}));

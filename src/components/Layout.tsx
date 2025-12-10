@@ -24,7 +24,11 @@ export function CenterLayout({ children }: { children: React.ReactNode }) {
   return <main className="w-full h-screen grid place-items-center">{children}</main>;
 }
 export function SidebarLayout({ children }: { children: React.ReactNode }) {
-  return <main className="grid grid-cols-[260px_1fr] h-screen overflow-hidden">{children}</main>;
+  return (
+    <main className="grid grid-cols-1 md:grid-cols-[248px_1fr] h-screen overflow-hidden">
+      {children}
+    </main>
+  );
 }
 export function InnerPage({ children }: { children: React.ReactNode }) {
   return <div className="w-full h-full overflow-y-scroll">{children}</div>;
