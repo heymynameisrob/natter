@@ -7,7 +7,7 @@
     "dev": "bun runner.ts",
     "dev:vite": "vite dev",
     "dev:partykit": "bunx partykit dev",
-    "build": "vite build",
+    "build": "drizzle-kit migrate && vite build",
     "deploy:partykit": "bunx partykit deploy --name tanstack-start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
