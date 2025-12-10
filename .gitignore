@@ -1,0 +1,40 @@
+# deps
+node_modules
+sqlite.db
+.partykit
+
+# output
+out
+dist
+*.tgz
+.netlify
+.tanstack
+playwright-report
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# IntelliJ based IDEs
+.idea
+
+# Misc
+.DS_Store
+test-results

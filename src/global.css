@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #fff;
+
+  --gray-1: oklch(0.98 0 0);
+  --gray-2: oklch(0.96 0 0);
+  --gray-3: oklch(0.92 0 0);
+  --gray-4: oklch(0.88 0 0);
+  --gray-5: oklch(0.86 0 0);
+  --gray-6: oklch(0.82 0 0);
+  --gray-7: oklch(0.76 0 0);
+  --gray-8: oklch(0.72 0 0);
+  --gray-9: oklch(0.56 0 0);
+  --gray-10: oklch(0.52 0 0);
+  --gray-11: oklch(0.4 0 0);
+  --gray-115: oklch(0.24 0 0);
+  --gray-12: oklch(0.12 0 0);
+
+  --shadow: hsl(154, 12%, 12%);
+  --border: color-mix(in srgb, var(--gray-12) 10%, transparent);
+  --accent: oklch(0.692 0.1595 240.38);
+}
+
+.dark {
+  --background: oklch(0.18 0 0);
+
+  --gray-1: oklch(0.22 0 0);
+  --gray-2: oklch(0.28 0 0);
+  --gray-3: oklch(0.32 0 0);
+  --gray-4: oklch(0.36 0 0);
+  --gray-5: oklch(0.4 0 0);
+  --gray-6: oklch(0.45 0 0);
+  --gray-7: oklch(0.51 0 0);
+  --gray-8: oklch(0.59 0 0);
+  --gray-9: oklch(0.61 0 0);
+  --gray-10: oklch(0.69 0 0);
+  --gray-11: oklch(0.84 0 0);
+  --gray-115: oklch(0.87 0 0);
+  --gray-12: oklch(0.95 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ring: var(--gray-7);
+  --color-primary: var(--gray-12);
+  --color-secondary: var(--gray-11);
+  --color-accent: var(--accent);
+  --color-accent-dark: color-mix(in srgb, var(--color-accent) 80%, black);
+  --color-border: var(--border);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-accent: rgb(var(--accent));
+  --color-gray-1: var(--gray-1);
+  --color-gray-2: var(--gray-2);
+  --color-gray-3: var(--gray-3);
+  --color-gray-4: var(--gray-4);
+  --color-gray-5: var(--gray-5);
+  --color-gray-6: var(--gray-6);
+  --color-gray-7: var(--gray-7);
+  --color-gray-8: var(--gray-8);
+  --color-gray-9: var(--gray-9);
+  --color-gray-10: var(--gray-10);
+  --color-gray-11: var(--gray-11);
+  --color-gray-12: var(--gray-12);
+
+  --shadow-flat: var(--shadow-flat);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-floating: var(--shadow-floating);
+  --shadow-popover: var(--shadow-popover);
+
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+  --font-weight-medium: 500;
+  --font-weight-normal: 450;
+
+  --z-max: 999999;
+
+  --ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  --shadow-container: inset 0px 0px 0px 1px var(--border);
+  --shadow-raised:
+    0px 0px 16px color-mix(in srgb, var(--shadow) 10%, transparent), 0 0 0 1px var(--border);
+  --shadow-floating:
+    0px 4px 16px color-mix(in srgb, var(--shadow) 10%, transparent),
+    0px 8px 32px color-mix(in srgb, var(--shadow) 5%, transparent), 0 0 0 1px var(--border);
+}
+
+@layer base {
+  * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    min-width: 0;
+    outline-color: color-mix(in oklab, var(--gray-7) 50%, transparent);
+    border-color: var(--border);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 10%, transparent);
+    color: var(--accent);
+  }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: none !important;
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 3px !important;
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-gray-12 font-sans antialiased min-h-screen h-full overflow-x-hidden;
+  }
+
+  .focus {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-gray-1;
+  }
+  .root {
+    isolation: isolate;
+  }
+
+  [disabled] {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
+      opacity: 1 !important;
+      animation-delay: 0 !important;
+    }
+  }
+}
