@@ -18,8 +18,6 @@ export function getRouter() {
         retry: 1,
         /** Data should always be fresh */
         staleTime: 0,
-        /** By default, use stale data as a placeholder to reduce excessive loading spinners */
-        placeholderData: keepPreviousData,
       },
       mutations: {
         /** Log errors to console. Add error tracking like Sentry/PostHog here */

@@ -2,11 +2,117 @@ import { nanoid, z } from "zod";
 import { createServerFn } from "@tanstack/react-start";
 import { generate } from "random-words";
 import { addDays } from "date-fns";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 import { authMiddleware } from "@/middleware/auth";
 import { db, schema } from "@/lib/db";
 import { INVITE_TOKEN_EXPIRY_DAYS } from "@/lib/utils";
+
+export const getAllRoomIds = createServerFn({ method: "GET" })
+  .inputValidator(
+    z.object({
+      cursor: z.number().optional(), // Last room ID from previous page
+      limit: z.number().min(1).max(100).default(20),
+    })
+  )
+  .middleware([authMiddleware])
+  .handler(async ({ data, context }) => {
+    const userId = context.session.user.id;
+    const limit = data.limit;
+
+    // Get room IDs for this user, ordered by lastMessageAt (most recent first)
+    const membershipRoomIds = await db
+      .select({
+        roomId: schema.roomMembers.roomId,
+        lastMessageAt: schema.rooms.lastMessageAt,
+      })
+      .from(schema.roomMembers)
+      .innerJoin(schema.rooms, eq(schema.roomMembers.roomId, schema.rooms.id))
+      .where(
+        and(
+          eq(schema.roomMembers.userId, userId),
+          data.cursor ? eq(schema.rooms.id, data.cursor) : undefined
+        )
+      )
+      .orderBy(schema.rooms.lastMessageAt)
+      .limit(limit + 1); // Fetch one extra to determine if there are more
+
+    const hasMore = membershipRoomIds.length > limit;
+    const roomIds = membershipRoomIds.slice(0, limit).map(m => m.roomId);
+    const nextCursor =
+      hasMore && membershipRoomIds[limit] ? membershipRoomIds[limit].roomId : undefined;
+
+    return {
+      ids: roomIds,
+      nextCursor,
+      hasMore,
+    };
+  });
+
+export const getRoomById = createServerFn({ method: "GET" })
+  .inputValidator(
+    z.object({
+      roomId: z.number(),
+    })
+  )
+  .middleware([authMiddleware])
+  .handler(async ({ data, context }) => {
+    const [membership] = await db
+      .select()
+      .from(schema.roomMembers)
+      .where(
+        and(
+          eq(schema.roomMembers.roomId, data.roomId),
+          eq(schema.roomMembers.userId, context.session.user.id)
+        )
+      )
+      .limit(1);
+
+    if (!membership) {
+      throw new Error("Unauthorized: You are not a member of this room");
+    }
+
+    const room = await db.select().from(schema.rooms).where(eq(schema.rooms.id, data.roomId));
+
+    if (!room) {
+      throw new Error("Room not found");
+    }
+
+    return room;
+  });
+
+export const getRoomsByIds = createServerFn({ method: "GET" })
+  .inputValidator(
+    z.object({
+      roomIds: z.array(z.number()).min(1).max(100),
+    })
+  )
+  .middleware([authMiddleware])
+  .handler(async ({ data, context }) => {
+    const userId = context.session.user.id;
+
+    // Verify user is a member of all requested rooms
+    const memberships = await db
+      .select({ roomId: schema.roomMembers.roomId })
+      .from(schema.roomMembers)
+      .where(
+        and(eq(schema.roomMembers.userId, userId), inArray(schema.roomMembers.roomId, data.roomIds))
+      );
+
+    const authorizedRoomIds = memberships.map(m => m.roomId);
+
+    // Only fetch rooms the user is authorized to see
+    if (authorizedRoomIds.length === 0) {
+      return [];
+    }
+
+    const rooms = await db
+      .select()
+      .from(schema.rooms)
+      .where(inArray(schema.rooms.id, authorizedRoomIds));
+
+    return rooms;
+  });
 
 const NewRoomPayloadSchema = z.object({
   name: z.string().min(2).max(100),
