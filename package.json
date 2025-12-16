@@ -22,12 +22,14 @@
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
     "db:status": "drizzle-kit status",
+    "db:seed": "bun scripts/seed.ts",
     "unit:test": "bun test",
     "e2e:test": "bunx playwright test",
     "prepare": "husky"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@faker-js/faker": "^10.1.0",
     "@netlify/vite-plugin-tanstack-start": "^1.2.3",
     "@tanstack/eslint-plugin-query": "^5.91.2",
     "@types/bun": "latest",
@@ -41,10 +43,10 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^16.5.0",
     "husky": "^9.1.7",
+    "partykit": "0.0.115",
     "typescript-eslint": "^8.48.1",
     "vite": "^7.2.7",
-    "vite-tsconfig-paths": "^5.1.4",
-    "partykit": "0.0.115"
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "peerDependencies": {
     "typescript": "^5"
