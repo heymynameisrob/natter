@@ -25,8 +25,11 @@ export const Route = createFileRoute("/api/party/test")({
         const success = await sendPartyKitEvent(session.user.id, {
           type: "message",
           payload: {
-            title: "Test notification",
-            body: `Sent at ${new Date().toISOString()}`,
+            id: 1,
+            roomId: 1,
+            plainText: "Test message",
+            mentions: [],
+            senderId: session.user.id,
           },
         });
 

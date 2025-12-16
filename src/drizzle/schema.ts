@@ -7,7 +7,9 @@ export const user = sqliteTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
   image: text("image"),
-  notificationsEnabled: integer("notifications_enabled", { mode: "boolean" }).default(true).notNull(),
+  notificationsEnabled: integer("notifications_enabled", { mode: "boolean" })
+    .default(true)
+    .notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .notNull(),
@@ -109,23 +111,14 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
-export const posts = sqliteTable("posts", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  title: text("title").notNull(),
-  content: text("content"),
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  metadata: text("metadata", { mode: "json" }).$type<{ foo: string }>(),
-});
-
 // Rooms
 export const rooms = sqliteTable("rooms", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   publicId: text("public_id").notNull().unique(),
   name: text("name"),
-  lastMessageAt: integer("last_message_at", { mode: "timestamp_ms" })
-    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
-    .notNull(),
+  lastMessageAt: integer("last_message_at", { mode: "timestamp_ms" }).default(
+    sql`(cast(unixepoch('subsecond') * 1000 as integer))`
+  ),
   inviteToken: text("invite_token").notNull(),
   tokenExpiresAt: integer("token_expires_at", { mode: "timestamp_ms" }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
@@ -145,13 +138,15 @@ export const messages = sqliteTable(
     roomId: integer("room_id")
       .notNull()
       .references(() => rooms.id, { onDelete: "cascade" }),
-    content: text("content", { mode: "json" }).$type<Record<string, unknown>>().notNull(),
+    content: text("content", { mode: "json" }).$type<Record<string, any>>().notNull(),
     plainText: text("plain_text").notNull(),
     senderId: text("sender_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     mentions: text("mentions", { mode: "json" }).$type<string[]>().default([]),
-    reactions: text("reactions", { mode: "json" }).$type<Array<{ userId: string; emoji: string }>>().default([]),
+    reactions: text("reactions", { mode: "json" })
+      .$type<Array<{ userId: string; emoji: string }>>()
+      .default([]),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
@@ -177,7 +172,9 @@ export const roomMembers = sqliteTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    role: text("role", { enum: ["admin", "member"] }).default("member").notNull(),
+    role: text("role", { enum: ["admin", "member"] })
+      .default("member")
+      .notNull(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
@@ -199,7 +196,9 @@ export const roomSubscriptions = sqliteTable(
     roomId: integer("room_id")
       .notNull()
       .references(() => rooms.id, { onDelete: "cascade" }),
-    status: text("status", { enum: ["off", "mentions", "all"] }).default("all").notNull(),
+    status: text("status", { enum: ["off", "mentions", "all"] })
+      .default("all")
+      .notNull(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),

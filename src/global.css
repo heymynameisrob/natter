@@ -8,7 +8,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/OpenRunde-Regular.woff2') format('woff2');
+  src: url("/OpenRunde-Regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -16,7 +16,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('/OpenRunde-Medium.woff2') format('woff2');
+  src: url("/OpenRunde-Medium.woff2") format("woff2");
 }
 
 @font-face {
@@ -24,7 +24,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('/OpenRunde-Semibold.woff2') format('woff2');
+  src: url("/OpenRunde-Semibold.woff2") format("woff2");
 }
 
 @font-face {
@@ -32,7 +32,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/OpenRunde-Bold.woff2') format('woff2');
+  src: url("/OpenRunde-Bold.woff2") format("woff2");
 }
 
 :root {
@@ -54,7 +54,7 @@
 
   --shadow: hsl(154, 12%, 12%);
   --border: color-mix(in srgb, var(--gray-12) 10%, transparent);
-  --accent: oklch(0.6633 0.1944 147.44)
+  --accent: oklch(0.6633 0.1944 147.44);
 }
 
 .dark {

@@ -9,6 +9,8 @@ export function withClientOnly<T extends (...args: any[]) => any>(fn: T): T {
   }) as T;
 }
 
+export const INVITE_TOKEN_EXPIRY_DAYS = 7;
+
 export const ONE_MINUTE = 60_000;
 export const TEN_MINUTES = 600_000;
 export const ONE_HUNDRED_MINUTES = 6_000_000;

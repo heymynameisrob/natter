@@ -17,7 +17,7 @@ export function PartyListener({ children, userId, token }: PartyListenerProps) {
       /** This is where we'll add the queryClient.refetchQuery for messages  */
       /** This is where we'll add a trigger notification too that checks prefs and creates a push notif  */
       if (message.type === "message") {
-        console.log("[Party]", message.payload.title);
+        console.log("[Party]", message.payload.plainText);
       }
     },
   });

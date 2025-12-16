@@ -12,7 +12,16 @@ import type * as Party from "partykit/server";
  */
 
 export type PartyMessage =
-  | { type: "message"; payload: { title: string; body?: string } }
+  | {
+      type: "message";
+      payload: {
+        id: number;
+        roomId: number;
+        plainText: string;
+        mentions: string[];
+        senderId: string;
+      };
+    }
   | {
       type: "sync";
       payload: { resource: string; action: "created" | "updated" | "deleted"; id: string };
