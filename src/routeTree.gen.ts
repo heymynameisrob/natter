@@ -8,189 +8,196 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as UiRouteImport } from "./routes/ui";
-import { Route as LoginRouteImport } from "./routes/login";
-import { Route as AuthRouteImport } from "./routes/_auth";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as AuthAppIndexRouteImport } from "./routes/_auth/app/index";
-import { Route as ApiPartyVerifyRouteImport } from "./routes/api/party/verify";
-import { Route as ApiPartyTestRouteImport } from "./routes/api/party/test";
-import { Route as ApiAuthSplatRouteImport } from "./routes/api/auth/$";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as UiRouteImport } from './routes/ui'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
+import { Route as ApiPartyVerifyRouteImport } from './routes/api/party/verify'
+import { Route as ApiPartyTestRouteImport } from './routes/api/party/test'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const UiRoute = UiRouteImport.update({
-  id: "/ui",
-  path: "/ui",
+  id: '/ui',
+  path: '/ui',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const LoginRoute = LoginRouteImport.update({
-  id: "/login",
-  path: "/login",
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AuthRoute = AuthRouteImport.update({
-  id: "/_auth",
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
-  id: "/app/",
-  path: "/app/",
+  id: '/app/',
+  path: '/app/',
   getParentRoute: () => AuthRoute,
-} as any);
+} as any)
 const ApiPartyVerifyRoute = ApiPartyVerifyRouteImport.update({
-  id: "/api/party/verify",
-  path: "/api/party/verify",
+  id: '/api/party/verify',
+  path: '/api/party/verify',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ApiPartyTestRoute = ApiPartyTestRouteImport.update({
-  id: "/api/party/test",
-  path: "/api/party/test",
+  id: '/api/party/test',
+  path: '/api/party/test',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: "/api/auth/$",
-  path: "/api/auth/$",
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/login": typeof LoginRoute;
-  "/ui": typeof UiRoute;
-  "/api/auth/$": typeof ApiAuthSplatRoute;
-  "/api/party/test": typeof ApiPartyTestRoute;
-  "/api/party/verify": typeof ApiPartyVerifyRoute;
-  "/app": typeof AuthAppIndexRoute;
+  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/ui': typeof UiRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/party/test': typeof ApiPartyTestRoute
+  '/api/party/verify': typeof ApiPartyVerifyRoute
+  '/app': typeof AuthAppIndexRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/login": typeof LoginRoute;
-  "/ui": typeof UiRoute;
-  "/api/auth/$": typeof ApiAuthSplatRoute;
-  "/api/party/test": typeof ApiPartyTestRoute;
-  "/api/party/verify": typeof ApiPartyVerifyRoute;
-  "/app": typeof AuthAppIndexRoute;
+  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/ui': typeof UiRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/party/test': typeof ApiPartyTestRoute
+  '/api/party/verify': typeof ApiPartyVerifyRoute
+  '/app': typeof AuthAppIndexRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  "/": typeof IndexRoute;
-  "/_auth": typeof AuthRouteWithChildren;
-  "/login": typeof LoginRoute;
-  "/ui": typeof UiRoute;
-  "/api/auth/$": typeof ApiAuthSplatRoute;
-  "/api/party/test": typeof ApiPartyTestRoute;
-  "/api/party/verify": typeof ApiPartyVerifyRoute;
-  "/_auth/app/": typeof AuthAppIndexRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
+  '/ui': typeof UiRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/party/test': typeof ApiPartyTestRoute
+  '/api/party/verify': typeof ApiPartyVerifyRoute
+  '/_auth/app/': typeof AuthAppIndexRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/"
-    | "/login"
-    | "/ui"
-    | "/api/auth/$"
-    | "/api/party/test"
-    | "/api/party/verify"
-    | "/app";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/login" | "/ui" | "/api/auth/$" | "/api/party/test" | "/api/party/verify" | "/app";
+    | '/'
+    | '/login'
+    | '/ui'
+    | '/api/auth/$'
+    | '/api/party/test'
+    | '/api/party/verify'
+    | '/app'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/login'
+    | '/ui'
+    | '/api/auth/$'
+    | '/api/party/test'
+    | '/api/party/verify'
+    | '/app'
   id:
-    | "__root__"
-    | "/"
-    | "/_auth"
-    | "/login"
-    | "/ui"
-    | "/api/auth/$"
-    | "/api/party/test"
-    | "/api/party/verify"
-    | "/_auth/app/";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/login'
+    | '/ui'
+    | '/api/auth/$'
+    | '/api/party/test'
+    | '/api/party/verify'
+    | '/_auth/app/'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AuthRoute: typeof AuthRouteWithChildren;
-  LoginRoute: typeof LoginRoute;
-  UiRoute: typeof UiRoute;
-  ApiAuthSplatRoute: typeof ApiAuthSplatRoute;
-  ApiPartyTestRoute: typeof ApiPartyTestRoute;
-  ApiPartyVerifyRoute: typeof ApiPartyVerifyRoute;
+  IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  UiRoute: typeof UiRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiPartyTestRoute: typeof ApiPartyTestRoute
+  ApiPartyVerifyRoute: typeof ApiPartyVerifyRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/ui": {
-      id: "/ui";
-      path: "/ui";
-      fullPath: "/ui";
-      preLoaderRoute: typeof UiRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/login": {
-      id: "/login";
-      path: "/login";
-      fullPath: "/login";
-      preLoaderRoute: typeof LoginRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/_auth": {
-      id: "/_auth";
-      path: "";
-      fullPath: "";
-      preLoaderRoute: typeof AuthRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/_auth/app/": {
-      id: "/_auth/app/";
-      path: "/app";
-      fullPath: "/app";
-      preLoaderRoute: typeof AuthAppIndexRouteImport;
-      parentRoute: typeof AuthRoute;
-    };
-    "/api/party/verify": {
-      id: "/api/party/verify";
-      path: "/api/party/verify";
-      fullPath: "/api/party/verify";
-      preLoaderRoute: typeof ApiPartyVerifyRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/api/party/test": {
-      id: "/api/party/test";
-      path: "/api/party/test";
-      fullPath: "/api/party/test";
-      preLoaderRoute: typeof ApiPartyTestRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/api/auth/$": {
-      id: "/api/auth/$";
-      path: "/api/auth/$";
-      fullPath: "/api/auth/$";
-      preLoaderRoute: typeof ApiAuthSplatRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+    '/ui': {
+      id: '/ui'
+      path: '/ui'
+      fullPath: '/ui'
+      preLoaderRoute: typeof UiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/app/': {
+      id: '/_auth/app/'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AuthAppIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/api/party/verify': {
+      id: '/api/party/verify'
+      path: '/api/party/verify'
+      fullPath: '/api/party/verify'
+      preLoaderRoute: typeof ApiPartyVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/party/test': {
+      id: '/api/party/test'
+      path: '/api/party/test'
+      fullPath: '/api/party/test'
+      preLoaderRoute: typeof ApiPartyTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthRouteChildren {
-  AuthAppIndexRoute: typeof AuthAppIndexRoute;
+  AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAppIndexRoute: AuthAppIndexRoute,
-};
+}
 
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren);
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -200,16 +207,16 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiPartyTestRoute: ApiPartyTestRoute,
   ApiPartyVerifyRoute: ApiPartyVerifyRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from "./router.tsx";
-import type { createStart } from "@tanstack/react-start";
-declare module "@tanstack/react-start" {
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
   interface Register {
-    ssr: true;
-    router: Awaited<ReturnType<typeof getRouter>>;
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
   }
 }

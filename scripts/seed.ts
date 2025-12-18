@@ -54,7 +54,7 @@ async function seed() {
       .select()
       .from(schema.user)
       .where(eq(schema.user.id, existingUser.id));
-    
+
     for (const user of await db.select().from(schema.user)) {
       if (user.id !== existingUser.id) {
         await db.delete(schema.user).where(eq(schema.user.id, user.id));
@@ -78,9 +78,7 @@ async function seed() {
       name: `${firstName} ${lastName}`,
       email: faker.internet.email({ firstName, lastName }).toLowerCase(),
       emailVerified: faker.datatype.boolean({ probability: 0.8 }),
-      image: faker.datatype.boolean({ probability: 0.6 })
-        ? faker.image.avatar()
-        : null,
+      image: faker.datatype.boolean({ probability: 0.6 }) ? faker.image.avatar() : null,
       notificationsEnabled: faker.datatype.boolean({ probability: 0.9 }),
       createdAt: faker.date.past({ years: 2 }),
       updatedAt: new Date(),
@@ -153,7 +151,7 @@ async function seed() {
     for (let j = 0; j < roomUserIds.length; j++) {
       const userId = roomUserIds[j];
       if (!userId) continue;
-      
+
       const isAdmin = j === 0; // First member is admin
 
       await db.insert(schema.roomMembers).values({
@@ -337,7 +335,7 @@ async function seed() {
       .from(schema.roomMembers)
       .where(eq(schema.roomMembers.roomId, roomId));
 
-    const memberUserIds = members.map((m) => m.userId);
+    const memberUserIds = members.map(m => m.userId);
 
     if (memberUserIds.length === 0) continue;
 
@@ -347,16 +345,16 @@ async function seed() {
     for (let convIdx = 0; convIdx < numConversations; convIdx++) {
       // Pick a random conversation template
       const template = faker.helpers.arrayElement(conversationTemplates);
-      
+
       // Start time for this conversation (randomly in the past 30 days)
       const baseTime = faker.date.recent({ days: 30 });
-      
+
       let lastSenderId: string | null = null;
-      
+
       for (let msgIdx = 0; msgIdx < template.length; msgIdx++) {
         const plainText = template[msgIdx];
         if (!plainText) continue;
-        
+
         // Different users participate in the conversation
         // Try to alternate speakers for more realistic flow
         let senderId: string;
@@ -365,8 +363,8 @@ async function seed() {
           senderId = faker.helpers.arrayElement(memberUserIds);
         } else {
           // Subsequent messages from different people (80% chance of different speaker)
-          const otherUsers = lastSenderId 
-            ? memberUserIds.filter((id) => id !== lastSenderId)
+          const otherUsers = lastSenderId
+            ? memberUserIds.filter(id => id !== lastSenderId)
             : memberUserIds;
           if (otherUsers.length > 0 && faker.datatype.boolean({ probability: 0.8 })) {
             senderId = faker.helpers.arrayElement(otherUsers);
@@ -374,7 +372,7 @@ async function seed() {
             senderId = faker.helpers.arrayElement(memberUserIds);
           }
         }
-        
+
         lastSenderId = senderId;
 
         // Create a simple Tiptap JSON structure
@@ -396,7 +394,7 @@ async function seed() {
         // Random mentions (15% chance, higher than before)
         const mentions: string[] = [];
         if (faker.datatype.boolean({ probability: 0.15 })) {
-          const otherUsers = memberUserIds.filter((id) => id !== senderId);
+          const otherUsers = memberUserIds.filter(id => id !== senderId);
           if (otherUsers.length > 0) {
             mentions.push(faker.helpers.arrayElement(otherUsers));
           }
@@ -423,7 +421,9 @@ async function seed() {
         }
 
         // Messages spaced 1-15 minutes apart within conversation
-        const createdAt = new Date(baseTime.getTime() + msgIdx * faker.number.int({ min: 60000, max: 900000 }));
+        const createdAt = new Date(
+          baseTime.getTime() + msgIdx * faker.number.int({ min: 60000, max: 900000 })
+        );
 
         await db.insert(schema.messages).values({
           roomId,
@@ -438,7 +438,7 @@ async function seed() {
 
         totalMessages++;
       }
-      
+
       // Add some spacing between conversations (1-6 hours)
       baseTime.setTime(baseTime.getTime() + faker.number.int({ min: 3600000, max: 21600000 }));
     }
@@ -464,15 +464,19 @@ async function seed() {
   // Summary
   console.log("🎉 Seed complete!\n");
   console.log("📊 Summary:");
-  console.log(`   - Users: ${allUserIds.length} (${existingUser ? "1 existing + " : ""}${dummyUserIds.length} new)`);
+  console.log(
+    `   - Users: ${allUserIds.length} (${existingUser ? "1 existing + " : ""}${dummyUserIds.length} new)`
+  );
   console.log(`   - Rooms: ${roomIds.length}`);
   console.log(`   - Messages: ${totalMessages}`);
-  console.log(`   - Existing user: ${existingUser ? `${existingUser.name} (${existingUser.email})` : "None found"}\n`);
+  console.log(
+    `   - Existing user: ${existingUser ? `${existingUser.name} (${existingUser.email})` : "None found"}\n`
+  );
 }
 
 // Run seed
 seed()
-  .catch((error) => {
+  .catch(error => {
     console.error("❌ Seed failed:", error);
     process.exit(1);
   })
